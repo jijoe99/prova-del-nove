@@ -7,7 +7,8 @@ import { SITE } from '../site';
     <h1>Contatti</h1>
     <div class="prose" style="margin-top:28px">
       <p>Hai un problema simile a quelli raccontati qui, o vuoi segnalare un errore? Scrivimi.</p>
-      <p class="mono" style="font-size:1.15rem">{SITE.contatto === 'DA-COMPILARE' ? 'Indirizzo da inserire prima della pubblicazione' : SITE.contatto}</p>
+      <p class="mono" style="font-size:1.15rem"><a href={`mailto:${SITE.contatto}?subject=Prova%20del%20nove`}>{SITE.contatto}</a></p>
+      <p>Scrivi nell'oggetto <strong>"prova del nove"</strong>, così trovo subito il tuo messaggio.</p>
       <p>Non c'è un modulo di contatto, quindi il sito non raccoglie i tuoi dati. Non inviare dati personali di clienti né password: bastano la descrizione del problema e, se vuoi, il link alla discussione originale.</p>
     </div>
   </div>

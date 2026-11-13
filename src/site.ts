@@ -4,7 +4,7 @@ export const SITE = {
   tagline: 'Problemi veri, soluzioni provate.',
   description:
     'Prendo domande reali dalle community tecniche, costruisco una soluzione e la provo in un ambiente isolato prima di raccontarla.',
-  contatto: 'DA-COMPILARE', // indirizzo email o profilo pubblico: lo decide l'utente
+  contatto: 'giordano.odorico@gmail.com',
 };
 
 export const TIPI = {

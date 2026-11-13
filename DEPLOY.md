@@ -58,6 +58,5 @@ Cloudflare Pages ha un piano gratuito (500 build al mese, 20.000 file per sito).
 
 ## Da fare prima del lancio
 
-- Scrivere l'indirizzo di contatto in `src/site.ts` (campo `contatto`).
 - Eliminare i tre file `esempio-*.md`.
 - Rileggere la pagina Contatti e il testo del footer.
