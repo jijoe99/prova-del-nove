@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+import { SITE, TIPI } from '../site';
+const { title, description = SITE.description, current = '' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const full = title ? `${title} | ${SITE.name}` : `${SITE.name} | ${SITE.tagline}`;
+const nav = [
+  ...Object.values(TIPI).map((t) => ({ href: `${base}/${t.path}/`, label: t.plurale, key: t.path })),
+  { href: `${base}/contatti/`, label: 'Contatti', key: 'contatti' },
+];
+---
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{full}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1d2a24" />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip" href="#contenuto">Vai al contenuto</a>
+    <header class="site-head">
+      <div class="wrap">
+        <a class="brand" href={`${base}/`}><i aria-hidden="true"></i>{SITE.name}</a>
+        <nav class="nav" aria-label="Principale">
+          {nav.map((n) => <a href={n.href} aria-current={current === n.key ? 'page' : undefined}>{n.label}</a>)}
+        </nav>
+      </div>
+    </header>
+    <main id="contenuto" class="wrap"><slot /></main>
+    <footer class="site-foot">
+      <div class="wrap">
+        <p>Le demo usano sempre dati fittizi. I casi studio escono solo con il permesso scritto del cliente. Le bozze sono preparate con l'aiuto dell'IA e riviste da una persona prima di essere pubblicate.</p>
+        <p>Nessun cookie, nessuna analisi dei visitatori, nessun modulo.</p>
+      </div>
+    </footer>
+  </body>
+</html>

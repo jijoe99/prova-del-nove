@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { TIPI } from '../../site';
+import { pubblicati } from '../../lib';
+export function getStaticPaths() {
+  return Object.entries(TIPI).map(([tipo, t]) => ({ params: { tipo: t.path }, props: { tipo } }));
+}
+const { tipo } = Astro.props;
+const t = TIPI[tipo];
+const posts = await pubblicati(tipo);
+---
+<Base title={t.plurale} description={t.desc} current={t.path}>
+  <h1>{t.plurale}</h1>
+  <p class="lead">{t.desc}</p>
+  {tipo === 'demo' && <p class="avviso"><strong>Dati fittizi.</strong> Ogni demo usa solo numeri e nomi inventati. Nessun dato di persone o aziende reali.</p>}
+  <section class="sec" aria-label={t.plurale}>
+    {posts.length ? <div class="grid">{posts.map((p) => <PostCard post={p} />)}</div> : <p class="empty">Nessun elemento pubblicato per ora.</p>}
+  </section>
+</Base>

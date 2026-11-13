@@ -1,0 +1,9 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base title="Pagina non trovata">
+  <h1>Pagina non trovata</h1>
+  <p class="lead">Questo indirizzo non esiste, o l'articolo non è ancora pubblicato.</p>
+  <a class="btn" href={`${base}/`}>Torna alla home</a>
+</Base>

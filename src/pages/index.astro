@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import { SITE } from '../site';
+import { pubblicati } from '../lib';
+const posts = (await pubblicati()).slice(0, 3); // 1 in evidenza + 2 affiancati: la griglia non ha mai caselle vuote (con 2 post resta una cella: aggiornare se serve)
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base>
+  <section class="hero" aria-labelledby="titolo">
+    <div>
+      <h1 id="titolo">Problemi veri. <span>Soluzioni provate.</span></h1>
+      <p class="lead">{SITE.description}</p>
+      <a class="btn" href={`${base}/demo/`}>Vedi le demo</a>
+    </div>
+    <figure class="proof">
+      <div class="cross" aria-hidden="true"><b>2</b><b>1</b><b>5</b><b>1</b></div>
+      <figcaption>La prova del nove: 47 × 23 = 1081. Le cifre di 47 danno 2, quelle di 23 danno 5, 2 × 5 = 10 e quindi 1. Anche 1081 dà 1.</figcaption>
+    </figure>
+  </section>
+
+  <section class="sec" aria-labelledby="ultimi">
+    <h2 id="ultimi">Ultimi pubblicati</h2>
+    {posts.length ? (
+      <div class="grid home">
+        <PostCard post={posts[0]} big />
+        {posts.slice(1).map((p) => <PostCard post={p} />)}
+      </div>
+    ) : (
+      <p class="empty">Ancora nessun articolo pubblicato. Il primo arriva presto.</p>
+    )}
+  </section>
+
+  <section class="sec" aria-labelledby="metodo">
+    <h2 id="metodo">Come lavoro</h2>
+    <ol class="metodo">
+      <li><strong>Raccolgo</strong><span>Domande reali dalle community tecniche, con il link alla fonte.</span></li>
+      <li><strong>Costruisco</strong><span>Una soluzione scritta con un modello locale e rivista da una persona.</span></li>
+      <li><strong>Provo</strong><span>Test in un ambiente isolato. Se non passa, non lo pubblico.</span></li>
+    </ol>
+  </section>
+</Base>

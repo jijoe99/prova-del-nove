@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site';
+---
+<Base title="Contatti" description="Come scrivermi." current="contatti">
+  <div class="post">
+    <h1>Contatti</h1>
+    <div class="prose" style="margin-top:28px">
+      <p>Hai un problema simile a quelli raccontati qui, o vuoi segnalare un errore? Scrivimi.</p>
+      <p class="mono" style="font-size:1.15rem">{SITE.contatto === 'DA-COMPILARE' ? 'Indirizzo da inserire prima della pubblicazione' : SITE.contatto}</p>
+      <p>Non c'è un modulo di contatto, quindi il sito non raccoglie i tuoi dati. Non inviare dati personali di clienti né password: bastano la descrizione del problema e, se vuoi, il link alla discussione originale.</p>
+    </div>
+  </div>
+</Base>

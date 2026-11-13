@@ -1,0 +1,16 @@
+---
+import { TIPI } from '../site';
+import { href, fmt, èEsempio } from '../lib';
+const { post, big = false } = Astro.props;
+const d = post.data;
+---
+<article class:list={['card', { big }]}>
+  <div class="meta">
+    <span class="kicker">{TIPI[d.tipo].label}</span>
+    {d.dati_fittizi && <span class="badge">Dati fittizi</span>}
+    {èEsempio(post.id) && <span class="tag">Esempio</span>}
+  </div>
+  <h3><a href={href(import.meta.env.BASE_URL, post)}>{d.title}</a></h3>
+  <p>{d.description}</p>
+  <time datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time>
+</article>

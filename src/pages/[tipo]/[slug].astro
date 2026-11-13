@@ -1,0 +1,39 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { TIPI } from '../../site';
+import { pubblicati, fmt, èEsempio } from '../../lib';
+export async function getStaticPaths() {
+  const posts = await pubblicati();
+  return posts.map((post) => ({
+    params: { tipo: TIPI[post.data.tipo].path, slug: post.id.split('/').pop() },
+    props: { post },
+  }));
+}
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const t = TIPI[d.tipo];
+---
+<Base title={d.title} description={d.description} current={t.path}>
+  <article class="post">
+    <header>
+      <div class="meta">
+        <span class="kicker">{t.label}</span>
+        {d.dati_fittizi && <span class="badge">Dati fittizi</span>}
+      </div>
+      <h1>{d.title}</h1>
+      <p class="lead" style="margin:0">{d.description}</p>
+    </header>
+    {èEsempio(post.id) && <p class="avviso"><strong>Articolo di esempio.</strong> Serve solo a mostrare l'aspetto del blog. Persone, aziende e numeri sono inventati.</p>}
+    {d.dati_fittizi && <p class="avviso"><strong>Dati fittizi.</strong> Tutti i dati di questa pagina sono inventati a scopo dimostrativo.</p>}
+    <dl class="dl">
+      <dt>Data</dt><dd><time datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time></dd>
+      {d.strumenti.length > 0 && <><dt>Strumenti</dt><dd>{d.strumenti.join(', ')}</dd></>}
+      {d.uso_ia && <><dt>Uso dell'IA</dt><dd>{d.uso_ia}</dd></>}
+      {d.fonte_problema && <><dt>Problema di origine</dt><dd><a href={d.fonte_problema} rel="noopener noreferrer">{d.fonte_problema}</a></dd></>}
+      {d.permesso_cliente && <><dt>Permesso</dt><dd>{d.permesso_cliente}</dd></>}
+    </dl>
+    <div class="prose"><Content /></div>
+  </article>
+</Base>
