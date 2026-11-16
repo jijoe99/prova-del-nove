@@ -1,6 +1,6 @@
 # Blog "Prova del Nove": uso e pubblicazione
 
-Sito statico fatto con Astro. Nessun deploy è stato eseguito: questa pagina spiega come farlo quando decidi tu.
+Sito statico fatto con Astro, pubblicato su Cloudflare Pages.
 
 ## Anteprima in locale
 
@@ -33,21 +33,18 @@ opportunita_id: testo
 
 La build fallisce se una demo non ha `dati_fittizi: true` o se un caso studio non ha `permesso_cliente`.
 
-## Pubblicazione gratuita: due strade
+## Dove vive il sito
 
-Prima va deciso dove vive il blog. GitHub Pages gratuito, secondo la documentazione ufficiale, ha un limite di 1 GB per sito e 100 GB di banda al mese, e non è pensato per attività commerciali. La documentazione letta non conferma l'uso con repo privati sul piano gratuito: controlla la pagina "GitHub Pages" nei piani prima di contare su quella strada.
+**Cloudflare Pages**, collegato a questo repo: a ogni merge su `main` Cloudflare costruisce e pubblica da solo.
+Indirizzo: https://prova-del-nove.pages.dev/
 
-**Strada A (consigliata): repo pubblico separato solo per il blog.**
-1. Crea su GitHub un repo pubblico vuoto, per esempio `prova-del-nove`. Il repo del progetto resta privato.
-2. Copia dentro il contenuto della cartella `blog/` (senza `node_modules`, `dist`, `.astro`, `screenshots`). La cartella `.github/workflows/sito.yml` deve stare alla radice del nuovo repo.
-3. In Settings > Pages imposta Source: GitHub Actions.
-4. Fai il primo push su `main`: il workflow costruisce e pubblica.
-5. L'indirizzo sarà `https://TUOUTENTE.github.io/prova-del-nove/`.
+Impostazioni del progetto su Cloudflare:
+- comando di build `npm run build`, cartella di output `dist`;
+- variabili: `SITE_URL=https://prova-del-nove.pages.dev`, `BASE_PATH=/`, `NODE_VERSION=24`;
+- anteprime delle pull request **disattivate** (Settings > Builds > Branch control): un'anteprima mostrerebbe in pubblico un articolo prima del merge.
 
-Con questa strada il repo contiene solo il blog: niente codice del progetto, niente dati di clienti.
-
-**Strada B: Cloudflare Pages collegato al repo privato.**
-Cloudflare Pages ha un piano gratuito (500 build al mese, 20.000 file per sito). Se funzioni con repo privati sul piano gratuito va verificato nella loro documentazione prima di usarlo. Impostazioni di build: cartella radice `blog`, comando `npm run build`, cartella di output `dist`. Qui `SITE_URL` e `BASE_PATH` non servono per un dominio proprio di Cloudflare.
+Il vecchio indirizzo GitHub Pages (https://jijoe99.github.io/prova-del-nove/) resta attivo solo per reindirizzare:
+il workflow `.github/workflows/sito.yml` pubblica lì una pagina di rinvio per ogni pagina del sito, così i link già condivisi continuano a funzionare.
 
 ## Flusso delle bozze
 
