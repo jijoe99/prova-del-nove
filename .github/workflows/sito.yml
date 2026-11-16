@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  NEW_SITE: https://prova-del-nove.pages.dev
+  NEW_SITE: https://prova-del-nove.provadelnove.workers.dev
 
 jobs:
   build:

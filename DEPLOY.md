@@ -1,6 +1,6 @@
 # Blog "Prova del Nove": uso e pubblicazione
 
-Sito statico fatto con Astro, pubblicato su Cloudflare Pages.
+Sito statico fatto con Astro, pubblicato su Cloudflare (Workers).
 
 ## Anteprima in locale
 
@@ -35,13 +35,12 @@ La build fallisce se una demo non ha `dati_fittizi: true` o se un caso studio no
 
 ## Dove vive il sito
 
-**Cloudflare Pages**, collegato a questo repo: a ogni merge su `main` Cloudflare costruisce e pubblica da solo.
-Indirizzo: https://prova-del-nove.pages.dev/
+**Cloudflare Workers** (sito statico), collegato a questo repo: a ogni merge su `main` Cloudflare costruisce e pubblica da solo.
+Indirizzo: https://prova-del-nove.provadelnove.workers.dev/
 
-Impostazioni del progetto su Cloudflare:
-- comando di build `npm run build`, cartella di output `dist`;
-- variabili: `SITE_URL=https://prova-del-nove.pages.dev`, `BASE_PATH=/`, `NODE_VERSION=24`;
-- anteprime delle pull request **disattivate** (Settings > Builds > Branch control): un'anteprima mostrerebbe in pubblico un articolo prima del merge.
+Impostazioni del progetto su Cloudflare (Workers & Pages > prova-del-nove):
+- build automatica da `main` (Cloudflare riconosce Astro da solo); il sito non usa `SITE_URL` nei link, quindi non servono variabili;
+- Domains: indirizzo **Production** acceso, **Preview** spento: un'anteprima mostrerebbe in pubblico un articolo prima del merge.
 
 Il vecchio indirizzo GitHub Pages (https://jijoe99.github.io/prova-del-nove/) resta attivo solo per reindirizzare:
 il workflow `.github/workflows/sito.yml` pubblica lì una pagina di rinvio per ogni pagina del sito, così i link già condivisi continuano a funzionare.
