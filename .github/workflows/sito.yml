@@ -1,11 +1,14 @@
-# Workflow del blog. Va usato quando la cartella blog/ è la RADICE del repo del blog
-# (repo pubblico separato, vedi DEPLOY.md). Non pubblica nulla finché non lo attivi tu.
+# Il blog vive su Cloudflare Pages, che lo costruisce da solo a ogni merge su main (vedi DEPLOY.md).
+# Questo workflow fa due cose:
+# - sulle pull request controlla che la build passi;
+# - su main pubblica su GitHub Pages solo pagine di reindirizzamento, cosi' i vecchi link
+#   https://jijoe99.github.io/prova-del-nove/... portano alla stessa pagina sul nuovo indirizzo.
 name: Sito
 
 on:
-  pull_request:           # ogni bozza arriva come pull request: qui si controlla solo che la build passi
+  pull_request:
   push:
-    branches: [main]      # al merge su main il sito si aggiorna
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -15,19 +18,40 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+env:
+  NEW_SITE: https://prova-del-nove.provadelnove.workers.dev
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      # Per un sito di progetto (https://UTENTE.github.io/NOME-REPO/) servono questi due valori.
-      # Con un dominio personale: SITE_URL = https://tuodominio.it e BASE_PATH = /
-      SITE_URL: https://${{ github.repository_owner }}.github.io
-      BASE_PATH: /${{ github.event.repository.name }}
     steps:
       - uses: actions/checkout@v7
-      - uses: withastro/action@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
+          cache: npm
+      - run: npm ci
+      # stessa struttura di pagine del vecchio sito: serve a sapere quali indirizzi reindirizzare
+      - run: npm run build
+        env:
+          SITE_URL: ${{ env.NEW_SITE }}
+          BASE_PATH: /
+      - name: Pagine di reindirizzamento verso il nuovo indirizzo
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir redirect
+          cd dist
+          find . -name '*.html' | while read -r f; do
+            p="${f#./}"; p="${p%index.html}"
+            [ "$p" = "404.html" ] && p=""
+            mkdir -p "../redirect/$(dirname "$f")"
+            printf '<!doctype html><meta charset="utf-8"><title>Il blog si e'"'"' spostato</title><link rel="canonical" href="%s/%s"><meta http-equiv="refresh" content="0; url=%s/%s"><p>Il blog si e'"'"' spostato: <a href="%s/%s">%s/%s</a></p>\n' \
+              "$NEW_SITE" "$p" "$NEW_SITE" "$p" "$NEW_SITE" "$p" "$NEW_SITE" "$p" > "../redirect/$f"
+          done
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: redirect
 
   deploy:
     if: github.event_name != 'pull_request'
